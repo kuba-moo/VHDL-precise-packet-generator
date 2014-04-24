@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/kuba/Development/FPGA/PreciseTraficGen/tb_bus_append_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="tb_bus_append" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="6" />
+   <wvobject fp_name="/tb_bus_append/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_bus_append/inpkt" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">inpkt</obj_property>
+      <obj_property name="ObjectShortName">inpkt</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_bus_append/indata" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">indata[7:0]</obj_property>
+      <obj_property name="ObjectShortName">indata[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_bus_append/outpkt" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">outpkt</obj_property>
+      <obj_property name="ObjectShortName">outpkt</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_bus_append/outdata" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">outdata[7:0]</obj_property>
+      <obj_property name="ObjectShortName">outdata[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_bus_append/cnt64" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">cnt64[63:0]</obj_property>
+      <obj_property name="ObjectShortName">cnt64[63:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+</wave_config>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/kuba/Development/FPGA/PreciseTraficGen/tb_mem_reader_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_textio" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="tb_mem_reader" />
+            <top_module name="textio" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="6" />
+   <wvobject fp_name="/tb_mem_reader/clk_o" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk_o</obj_property>
+      <obj_property name="ObjectShortName">clk_o</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mem_reader/framelen" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">framelen[10:0]</obj_property>
+      <obj_property name="ObjectShortName">framelen[10:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mem_reader/frameival" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">frameival[27:0]</obj_property>
+      <obj_property name="ObjectShortName">frameival[27:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mem_reader/uut/time_cnt" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">time_cnt[27:0]</obj_property>
+      <obj_property name="ObjectShortName">time_cnt[27:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mem_reader/buspkt" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">buspkt</obj_property>
+      <obj_property name="ObjectShortName">buspkt</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#aa5500</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mem_reader/busdata" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">busdata[7:0]</obj_property>
+      <obj_property name="ObjectShortName">busdata[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#aa5500</obj_property>
+   </wvobject>
+</wave_config>

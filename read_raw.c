@@ -1,0 +1,198 @@
+/*
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ * Copyright (C) 2014 Jakub Kicinski <kubakici@wp.pl>
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <termios.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <time.h>
+
+#define _BSD_SOURCE 1
+
+#define ADDR_STAT_MAX 0x1FF
+#define ADDR_REG_MIN  0xFF00
+#define ADDR_REG_MAX  0xFFFF
+
+#define NUM_REG_BYTES	28
+#define ADDR_LEN	2
+
+#define msg(fmt, ...) fprintf(stderr, fmt, ##__VA_ARGS__)
+
+/* Format in which device reports register dumps. */
+struct reg_dump {
+	unsigned long long __addr : 16;   /* Statistic addr, 0xFFFF for register dump. */
+	unsigned long long pkt_len : 16;
+	unsigned long long pkt_ival : 32;
+	unsigned long long pkt_delay : 32;
+	unsigned long long tx_frames : 36;
+	unsigned long long rx_control : 36;
+	unsigned long long rx_data : 36;
+	unsigned long long ts_uflow : 36;
+} __attribute__ ((packed));
+
+static void print_start_line(const char *name)
+{
+	time_t t;
+	struct tm *tm;
+	char str_time[64];
+
+	t = time(NULL);
+	tm = localtime(&t);
+
+	if (!strftime(str_time, sizeof(str_time), "%T %F", tm)) {
+		msg("Time-printing error!?\n");
+		return;
+	}
+
+	msg("\n%s @%s\n", name, str_time);
+}
+
+static int term_init(int fd)
+{
+	struct termios tty = { 0 };
+
+	msg("INIT: setting tty device paramters\n");
+
+        if (tcgetattr(fd, &tty)) {
+		perror("get term attr");
+		return 1;
+        }
+
+        cfsetispeed(&tty, B9600);
+	cfmakeraw(&tty);
+
+        tty.c_iflag &= ~(IXON | IXOFF | IXANY);
+        tty.c_lflag = 0;
+        tty.c_cflag |= (CLOCAL | CREAD);
+        tty.c_cflag &= ~(PARODD | CSTOPB | CRTSCTS);
+
+        if (tcsetattr(fd, TCSANOW, &tty)) {
+                perror("set term attr");
+                return -1;
+        }
+
+        return 0;
+}
+
+#define pf(desc,fn)							\
+	({								\
+		unsigned long long __f_v =				\
+			(unsigned long long)((struct reg_dump *)buf)->fn; \
+									\
+		msg("%16s:  %10llu (%012llx)\n", desc, __f_v, __f_v);	\
+	})
+
+
+static int process_data(int fd)
+{
+	struct reg_dump rd = { 0 };
+	char *buf, *pos;
+	int rec = 0;
+	unsigned short addr = 0;
+
+	buf = pos = (char *)&rd;
+
+	while (1) {
+		ssize_t n;
+
+		n = read(fd, pos++, 1);
+		if (n < 0) {
+			perror("Read console");
+			exit(1);
+		}
+		if (n != 1) {
+			msg("Large read!?\n");
+			exit(2);
+		}
+
+		if (pos - buf == 2)
+			addr = rd.__addr;
+
+		if (addr <= ADDR_STAT_MAX && pos - buf == 7) {
+			static unsigned short old_addr;
+			unsigned long long val = *(unsigned long long *)&buf[2];
+
+			if (!addr)
+				print_start_line("Statistics dump");
+
+			pos = buf;
+
+			if (!val)
+				continue;
+
+			if (addr <= old_addr) {
+				rec = 0;
+				printf("\n\n");
+			}
+			old_addr = addr;
+
+			msg("%03hx: %16llu (%09llx)%c", addr, val, val,
+			    rec++ & 1 ? '\n' : '\t');
+		}
+
+		if (addr > ADDR_STAT_MAX &&
+		    pos - buf == NUM_REG_BYTES + ADDR_LEN) {
+			if (rec & 1) /* close record */
+				msg("\n");
+			print_start_line("Register dump");
+
+			pf("REG packet len", pkt_len);
+			pf("REG interval", pkt_ival);
+			pf("REG delay", pkt_delay);
+			pf("STAT tx frames", tx_frames);
+			pf("STAT RX ctrl", rx_control);
+			pf("STAT RX data", rx_data);
+			pf("STAT TS uflow", ts_uflow);
+
+			rec = 0;
+			pos = buf;
+		}
+	}
+
+	return 0;
+}
+
+int main(int argc, char **argv)
+{
+	int fd;
+
+	if (argc < 2) {
+		printf("Usage: %s <ttyDevice>\n", argv[0]);
+		return 1;
+	}
+
+	msg("INIT: using %s\n", argv[1]);
+
+	fd = open(argv[1], O_RDONLY | O_NOCTTY | O_SYNC);
+	if (fd < 0) {
+		perror("Open console");
+		return 1;
+	}
+	if (term_init(fd))
+		return 2;
+
+	msg("INIT: done.\n\n");
+	process_data(fd);
+
+	close(fd);
+
+	return 0;
+}

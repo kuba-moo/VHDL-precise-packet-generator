@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/kuba/Development/FPGA/PreciseTraficGen/tb_eth_add_crc_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="tb_eth_add_crc" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="12" />
+   <wvobject fp_name="/tb_eth_add_crc/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_eth_add_crc/rst" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_eth_add_crc/inpkt" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">inpkt</obj_property>
+      <obj_property name="ObjectShortName">inpkt</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_eth_add_crc/indata" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">indata[7:0]</obj_property>
+      <obj_property name="ObjectShortName">indata[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_eth_add_crc/outpkt" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">outpkt</obj_property>
+      <obj_property name="ObjectShortName">outpkt</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_eth_add_crc/outdata" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">outdata[7:0]</obj_property>
+      <obj_property name="ObjectShortName">outdata[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_eth_add_crc/not_out" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">not_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">not_out[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_eth_add_crc/rev" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">rev[7:0]</obj_property>
+      <obj_property name="ObjectShortName">rev[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_eth_add_crc/rev_not" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">rev_not[7:0]</obj_property>
+      <obj_property name="ObjectShortName">rev_not[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_eth_add_crc/uut/state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_eth_add_crc/uut/csum" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">csum[31:0]</obj_property>
+      <obj_property name="ObjectShortName">csum[31:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="Reversed">true</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_eth_add_crc/uut/nc" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">nc[0:31]</obj_property>
+      <obj_property name="ObjectShortName">nc[0:31]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="Reversed">false</obj_property>
+   </wvobject>
+</wave_config>

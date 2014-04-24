@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/kuba/Development/FPGA/PreciseTraficGen/tb_stat_reader_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="tb_stat_reader" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="14" />
+   <wvobject fp_name="/tb_stat_reader/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_stat_reader/trgr" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">trgr</obj_property>
+      <obj_property name="ObjectShortName">trgr</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_stat_reader/memdata" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">memdata[35:0]</obj_property>
+      <obj_property name="ObjectShortName">memdata[35:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_stat_reader/readerbusy" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">readerbusy</obj_property>
+      <obj_property name="ObjectShortName">readerbusy</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_stat_reader/memaddr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">memaddr[8:0]</obj_property>
+      <obj_property name="ObjectShortName">memaddr[8:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_stat_reader/byteout" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">byteout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">byteout[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_stat_reader/byteena" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">byteena</obj_property>
+      <obj_property name="ObjectShortName">byteena</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_stat_reader/uut/state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_stat_reader/uut/addr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">addr[8:0]</obj_property>
+      <obj_property name="ObjectShortName">addr[8:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_stat_reader/uut/cnt" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">cnt</obj_property>
+      <obj_property name="ObjectShortName">cnt</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_stat_reader/uut2/freqen" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">freqen</obj_property>
+      <obj_property name="ObjectShortName">freqen</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_stat_reader/uut2/byte" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">byte[7:0]</obj_property>
+      <obj_property name="ObjectShortName">byte[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_stat_reader/uut2/state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_stat_reader/uut2/rstx" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rstx</obj_property>
+      <obj_property name="ObjectShortName">rstx</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#6f4f00</obj_property>
+   </wvobject>
+</wave_config>

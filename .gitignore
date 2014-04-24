@@ -1,0 +1,17 @@
+*.lso
+*.prj
+*.cmd_log
+
+*.gise
+*.xise
+
+_xmsgs/
+debouncer.sym
+fuse.xmsgs
+fuseRelaunch.cmd
+ipcore_dir/
+iseconfig/
+main_bitgen.xwbt
+main_guide.ncd
+packet_mem.mif
+par_usage_statistics.html

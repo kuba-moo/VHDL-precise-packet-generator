@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/kuba/Development/FPGA/PreciseTraficGen/tb_uart_tx_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="tb_uart_tx" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="9" />
+   <wvobject fp_name="/tb_uart_tx/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart_tx/freqen" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">freqen</obj_property>
+      <obj_property name="ObjectShortName">freqen</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart_tx/byte" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">byte[7:0]</obj_property>
+      <obj_property name="ObjectShortName">byte[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart_tx/kick" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">kick</obj_property>
+      <obj_property name="ObjectShortName">kick</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#0000ff</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart_tx/rstx" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rstx</obj_property>
+      <obj_property name="ObjectShortName">rstx</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#6f3706</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart_tx/busy" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy</obj_property>
+      <obj_property name="ObjectShortName">busy</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <obj_property name="CustomSignalColor">#ffff00</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart_tx/uut/state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart_tx/uut/savebyte" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">savebyte[7:0]</obj_property>
+      <obj_property name="ObjectShortName">savebyte[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_uart_tx/uut/savekick" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">savekick</obj_property>
+      <obj_property name="ObjectShortName">savekick</obj_property>
+   </wvobject>
+</wave_config>

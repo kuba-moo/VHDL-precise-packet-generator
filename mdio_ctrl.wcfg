@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/kuba/Development/FPGA/PreciseTraficGen/tb_mdio_ctrl_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="std_logic_1164" />
+            <top_module name="std_logic_arith" />
+            <top_module name="std_logic_unsigned" />
+            <top_module name="tb_mdio_ctrl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="16" />
+   <wvobject fp_name="/tb_mdio_ctrl/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/rst" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/cnt64" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">cnt64[63:0]</obj_property>
+      <obj_property name="ObjectShortName">cnt64[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/mdio_i" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">mdio_i</obj_property>
+      <obj_property name="ObjectShortName">mdio_i</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/op" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">op</obj_property>
+      <obj_property name="ObjectShortName">op</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/addr" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">addr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">addr[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/data_i" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data_i[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_i[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/kick" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">kick</obj_property>
+      <obj_property name="ObjectShortName">kick</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/mdc" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">mdc</obj_property>
+      <obj_property name="ObjectShortName">mdc</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/mdio_o" type="logic" db_ref_id="1">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">mdio_o</obj_property>
+      <obj_property name="ObjectShortName">mdio_o</obj_property>
+      <obj_property name="label">mdio_o</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/mdio_t" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">mdio_t</obj_property>
+      <obj_property name="ObjectShortName">mdio_t</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/uut/cnt" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">cnt</obj_property>
+      <obj_property name="ObjectShortName">cnt</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/data_o" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">data_o[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_o[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/busy" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">busy</obj_property>
+      <obj_property name="ObjectShortName">busy</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/clk_period" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">clk_period</obj_property>
+      <obj_property name="ObjectShortName">clk_period</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_mdio_ctrl/uut/state" type="other" db_ref_id="1">
+      <obj_property name="ElementShortName">state</obj_property>
+      <obj_property name="ObjectShortName">state</obj_property>
+   </wvobject>
+</wave_config>

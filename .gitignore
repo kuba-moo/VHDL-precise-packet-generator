@@ -5,6 +5,8 @@
 *.gise
 *.xise
 
+arch.*
+
 _xmsgs/
 debouncer.sym
 fuse.xmsgs

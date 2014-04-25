@@ -48,6 +48,11 @@ struct reg_dump {
 	unsigned long long ts_uflow : 36;
 } __attribute__ ((packed));
 
+struct statistic {
+	unsigned long long __addr : 16;
+	unsigned long long value : 40;
+} __attribute__ ((packed));
+
 static void print_start_line(const char *name)
 {
 	time_t t;
@@ -104,6 +109,7 @@ static int term_init(int fd)
 static int process_data(int fd)
 {
 	struct reg_dump rd = { 0 };
+	struct statistic *stat = (void *)&rd;
 	char *buf, *pos;
 	int rec = 0;
 	unsigned short addr = 0;
@@ -128,7 +134,7 @@ static int process_data(int fd)
 
 		if (addr <= ADDR_STAT_MAX && pos - buf == 7) {
 			static unsigned short old_addr;
-			unsigned long long val = *(unsigned long long *)&buf[2];
+			unsigned long long val = stat->value;
 
 			if (!addr)
 				print_start_line("Statistics dump");

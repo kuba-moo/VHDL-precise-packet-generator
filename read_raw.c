@@ -117,6 +117,21 @@ static int term_init(int fd)
 		msg("%16s:  %10llu (%012llx)\n", desc, __f_v, __f_v);	\
 	})
 
+const char *time_units[] = { "ns", "us", "ms", "s" };
+#define pf_time(desc,fn)						\
+	({								\
+		unsigned long long __f_v = rd.fn;			\
+		unsigned long long __t = __f_v * 10;			\
+		int __r = 0;					       	\
+									\
+		while (__r < 3 && __t > 999) {				\
+			__r++;						\
+			__t /= 1000;					\
+		}							\
+									\
+		msg("%16s:  %10llu (%012llx) %3llu%s\n",		\
+		    desc, __f_v, __f_v, __t, time_units[__r]);		\
+	})
 
 static int process_data(int fd)
 {
@@ -169,8 +184,8 @@ static int process_data(int fd)
 			print_start_line(&rec, "Register dump");
 
 			pf("REG packet len", pkt_len);
-			pf("REG interval", pkt_ival);
-			pf("REG delay", pkt_delay);
+			pf_time("REG interval", pkt_ival);
+			pf_time("REG delay", pkt_delay);
 			pf("STAT tx frames", tx_frames);
 			pf("STAT RX ctrl", rx_control);
 			pf("STAT RX data", rx_data);

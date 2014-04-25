@@ -27,7 +27,7 @@
 
 #define _BSD_SOURCE 1
 
-#define ADDR_STAT_MAX 0x1FF
+#define ADDR_STAT_MAX 0x01FF
 #define ADDR_REG_MIN  0xFF00
 #define ADDR_REG_MAX  0xFFFF
 

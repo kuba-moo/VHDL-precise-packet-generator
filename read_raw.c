@@ -99,8 +99,7 @@ static int term_init(int fd)
 
 #define pf(desc,fn)							\
 	({								\
-		unsigned long long __f_v =				\
-			(unsigned long long)((struct reg_dump *)buf)->fn; \
+		unsigned long long __f_v = rd.fn;			\
 									\
 		msg("%16s:  %10llu (%012llx)\n", desc, __f_v, __f_v);	\
 	})
@@ -110,16 +109,17 @@ static int process_data(int fd)
 {
 	struct reg_dump rd = { 0 };
 	struct statistic *stat = (void *)&rd;
-	char *buf, *pos;
+	char *buf = (void *)&rd;
+	int chars_in;
 	int rec = 0;
-	unsigned short addr = 0;
+	unsigned short addr = 0, old_addr = 0;
 
-	buf = pos = (char *)&rd;
+	chars_in = 0;
 
 	while (1) {
 		ssize_t n;
 
-		n = read(fd, pos++, 1);
+		n = read(fd, buf + chars_in, 1);
 		if (n < 0) {
 			perror("Read console");
 			exit(1);
@@ -129,18 +129,21 @@ static int process_data(int fd)
 			exit(2);
 		}
 
-		if (pos - buf == 2)
+		chars_in++;
+
+		if (chars_in == ADDR_LEN)
 			addr = rd.__addr;
 
-		if (addr <= ADDR_STAT_MAX && pos - buf == 7) {
-			static unsigned short old_addr;
+		if (addr <= ADDR_STAT_MAX &&
+		    chars_in == sizeof(struct statistic)) {
 			unsigned long long val = stat->value;
 
 			if (!addr)
 				print_start_line("Statistics dump");
 
-			pos = buf;
+			chars_in = 0;
 
+			/* don't print zero-statistics */
 			if (!val)
 				continue;
 
@@ -155,7 +158,7 @@ static int process_data(int fd)
 		}
 
 		if (addr > ADDR_STAT_MAX &&
-		    pos - buf == NUM_REG_BYTES + ADDR_LEN) {
+		    chars_in == sizeof(struct reg_dump)) {
 			if (rec & 1) /* close record */
 				msg("\n");
 			print_start_line("Register dump");
@@ -169,7 +172,7 @@ static int process_data(int fd)
 			pf("STAT TS uflow", ts_uflow);
 
 			rec = 0;
-			pos = buf;
+			chars_in = 0;
 		}
 	}
 

@@ -36,6 +36,15 @@
 
 #define msg(fmt, ...) fprintf(stderr, fmt, ##__VA_ARGS__)
 
+#if USE_COLORS
+#define NORM "\e[0m"
+#define BOLD "\e[1m"
+#else
+#define NORM ""
+#define BOLD ""
+#endif
+
+
 /* Format in which device reports register dumps. */
 struct reg_dump {
 	unsigned long long __addr : 16;   /* Statistic addr, 0xFFFF for register dump. */
@@ -53,11 +62,15 @@ struct statistic {
 	unsigned long long value : 40;
 } __attribute__ ((packed));
 
-static void print_start_line(const char *name)
+static void print_start_line(int *last_record, const char *name)
 {
 	time_t t;
 	struct tm *tm;
 	char str_time[64];
+
+	if (*last_record & 1) /* close record */
+		msg("\n");
+	*last_record = 0;
 
 	t = time(NULL);
 	tm = localtime(&t);
@@ -67,7 +80,7 @@ static void print_start_line(const char *name)
 		return;
 	}
 
-	msg("\n%s @%s\n", name, str_time);
+	msg("\n" BOLD "%s @%s" NORM "\n", name, str_time);
 }
 
 static int term_init(int fd)
@@ -112,7 +125,7 @@ static int process_data(int fd)
 	char *buf = (void *)&rd;
 	int chars_in;
 	int rec = 0;
-	unsigned short addr = 0, old_addr = 0;
+	unsigned short addr = 0;
 
 	chars_in = 0;
 
@@ -139,7 +152,7 @@ static int process_data(int fd)
 			unsigned long long val = stat->value;
 
 			if (!addr)
-				print_start_line("Statistics dump");
+				print_start_line(&rec, "Statistics dump");
 
 			chars_in = 0;
 
@@ -147,21 +160,13 @@ static int process_data(int fd)
 			if (!val)
 				continue;
 
-			if (addr <= old_addr) {
-				rec = 0;
-				printf("\n\n");
-			}
-			old_addr = addr;
-
 			msg("%03hx: %16llu (%09llx)%c", addr, val, val,
 			    rec++ & 1 ? '\n' : '\t');
 		}
 
 		if (addr > ADDR_STAT_MAX &&
 		    chars_in == sizeof(struct reg_dump)) {
-			if (rec & 1) /* close record */
-				msg("\n");
-			print_start_line("Register dump");
+			print_start_line(&rec, "Register dump");
 
 			pf("REG packet len", pkt_len);
 			pf("REG interval", pkt_ival);
@@ -171,7 +176,6 @@ static int process_data(int fd)
 			pf("STAT RX data", rx_data);
 			pf("STAT TS uflow", ts_uflow);
 
-			rec = 0;
 			chars_in = 0;
 		}
 	}

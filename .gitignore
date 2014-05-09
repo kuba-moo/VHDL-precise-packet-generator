@@ -4,6 +4,7 @@
 
 *.gise
 *.xise
+*.txf
 
 arch.*
 

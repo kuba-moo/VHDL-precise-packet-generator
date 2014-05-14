@@ -1,6 +1,14 @@
 *.lso
+*.sym
+*.stx
+*.xst
 *.prj
+*.vhi
+*.spl
 *.cmd_log
+
+*.html
+*.xml
 
 *.gise
 *.xise
@@ -8,8 +16,8 @@
 
 arch.*
 
+a
 _xmsgs/
-debouncer.sym
 fuse.xmsgs
 fuseRelaunch.cmd
 ipcore_dir/
@@ -17,7 +25,6 @@ iseconfig/
 main_bitgen.xwbt
 main_guide.ncd
 packet_mem.mif
-par_usage_statistics.html
 _ngo/
 main.bgn
 main.bit
@@ -31,7 +38,6 @@ main.pad
 main.par
 main.pcf
 main.ptwx
-main.stx
 main.syr
 main.twr
 main.twx
@@ -39,7 +45,6 @@ main.unroutes
 main.ut
 main.xpi
 main.xst
-main_envsettings.html
 main_map.map
 main_map.mrp
 main_map.ncd
@@ -49,13 +54,8 @@ main_ngdbuild.xrpt
 main_pad.csv
 main_pad.txt
 main_par.xrpt
-main_summary.html
-main_summary.xml
-main_usage.xml
 main_xst.xrpt
-read_raw
-usage_statistics_webtalk.html
 webtalk.log
-webtalk_pn.xml
 xlnx_auto_0_xdb/
 xst/
+gen_ctrl

@@ -17,6 +17,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use work.globals.all;
 
 Library UNISIM;
 use UNISIM.vcomponents.all;
@@ -27,24 +28,24 @@ entity main is
 			  an : 	out STD_LOGIC_VECTOR(3 downto 0);
 			  Led : 	out STD_LOGIC_VECTOR(7 downto 0);
 			  sw : 	in	 STD_LOGIC_VECTOR(7 downto 0);
-           btn : 	in  STD_LOGIC_VECTOR(4 downto 0);
-			  PhyMdc	:		out STD_LOGIC;
-			  PhyMdio :		inout STD_LOGIC;
-			  PhyRstn : 	out STD_LOGIC;
-			  PhyRxd : 		in  STD_LOGIC_VECTOR(3 downto 0);
-			  PhyRxDv : 	in  STD_LOGIC;
-			  PhyRxClk : 	in  STD_LOGIC;
-			  PhyTxd : 		out STD_LOGIC_VECTOR(3 downto 0);
-			  PhyTxEn : 	out STD_LOGIC;
-			  PhyTxClk :	in  STD_LOGIC;
+           btn : 	in  STD_LOGIC_VECTOR(0 downto 0);
+			  PhyMdc		:	out STD_LOGIC;
+			  PhyMdio 	:	inout STD_LOGIC;
+			  PhyRstn 	: 	out STD_LOGIC;
+			  PhyRxd		:	in  STD_LOGIC_VECTOR(3 downto 0);
+			  PhyRxDv	: 	in  STD_LOGIC;
+			  PhyRxClk 	: 	in  STD_LOGIC;
+			  PhyTxd 	: 	out STD_LOGIC_VECTOR(3 downto 0);
+			  PhyTxEn 	: 	out STD_LOGIC;
+			  PhyTxClk 	:	in  STD_LOGIC;
 			  PhyTxEr	:	out STD_LOGIC;
+			  RsRx		:	in  STD_LOGIC;
 			  RsTx		:	out STD_LOGIC);
 end main;
 
 architecture Behavioral of main is
 	-- Turn button into reset - active '1'
 	signal rst	: STD_LOGIC;
-	signal btnD	: std_logic;
 	
 	component debouncer is
 	PORT( clk 			: in  STD_LOGIC;
@@ -74,8 +75,8 @@ architecture Behavioral of main is
 			Enable 		: in std_logic;
 			Cnt 			: OUT std_logic_vector(N_BITS - 1 downto 0));
 	END COMPONENT;
-	signal cnt_underflow_en, cnt_rx_pkt_en, cnt_rx_ctrl_en, cnt_tx_pkt_en : std_logic;
-	signal cnt_underflow, cnt_rx_pkt, cnt_rx_ctrl, cnt_tx_pkt : std_logic_vector(35 downto 0);
+	signal cnt_underflow_en, cnt_tx_pkt_en : std_logic;
+	signal cnt_underflow, cnt_rx_pkt, cnt_tx_pkt : std_logic_vector(35 downto 0);
 
 	COMPONENT disp
 	PORT(	clk_i 		: IN std_logic;
@@ -175,57 +176,13 @@ architecture Behavioral of main is
 	signal rxPktTs		: std_logic_vector(63 downto 0);
 	signal rxPktTsKick: std_logic;
 
-	-- CONTROL path
-	
-	COMPONENT ctrl_filter
-	PORT(	Clk 			: IN std_logic;
-			Rst 			: IN std_logic;
-			PktIn 		: IN std_logic;
-			DataIn 		: IN std_logic_vector(7 downto 0);          
-			PktOut 		: OUT std_logic;
-			DataOut 		: OUT std_logic_vector(7 downto 0);
-			CtrlEn 		: OUT std_logic;
-			CtrlData 	: OUT std_logic_vector(7 downto 0));
-	END COMPONENT;
-	signal ctrl_dout, ctrl_cout	: std_logic_vector(7 downto 0); 
-	signal ctrl_de, ctrl_ce 		: std_logic;
-
-	COMPONENT ctrl_regs
-	PORT(	Clk 			: IN std_logic;
-			PktIn			: IN std_logic;
-			DataIn 		: IN std_logic_vector(7 downto 0);          
-			PktOut 		: OUT std_logic;
-			DataOut 		: OUT std_logic_vector(7 downto 0);
-			Regs 			: OUT std_logic_vector(79 downto 0));
-	END COMPONENT;
-	signal ctrl_pout	: std_logic_vector(7 downto 0); 
-	signal ctrl_pe		: std_logic;
-	signal regs	: std_logic_vector(79 downto 0);
-	
-	signal reg_delay	: std_logic_vector(31 downto 0);
-	signal reg_fival	: std_logic_vector(31 downto 0);
-	signal reg_flen	: std_logic_vector(15 downto 0);
-		
-	COMPONENT ctrl_write_mem
-	PORT(	Clk 			: IN std_logic;
-			PktIn 		: IN std_logic;
-			DataIn		: IN std_logic_vector(7 downto 0);          
-			MemAddr 		: OUT std_logic_vector(10 downto 0);
-			MemData 		: OUT std_logic_vector(7 downto 0);
-			MemWe 		: OUT std_logic);
-	END COMPONENT;
-	signal ctrl_mem_addr : std_logic_vector(10 downto 0);
-	signal ctrl_mem_data : std_logic_vector(7 downto 0);
-	signal ctrl_mem_we	: std_logic;
+	-- TX: Ethernet tramsmit path
 	
 	COMPONENT packet_mem
 	PORT( clka 			: IN STD_LOGIC;
 			wea 			: IN STD_LOGIC_VECTOR(0 DOWNTO 0);
 			addra 		: IN STD_LOGIC_VECTOR(10 DOWNTO 0);
 			dina 			: IN STD_LOGIC_VECTOR(7 DOWNTO 0);
-				
-	-- TX: Ethernet tramsmit path
-			
 			clkb 			: IN STD_LOGIC;
 			addrb 		: IN STD_LOGIC_VECTOR(10 DOWNTO 0);
 			doutb 		: OUT STD_LOGIC_VECTOR(7 DOWNTO 0));
@@ -338,86 +295,90 @@ architecture Behavioral of main is
 			dinb 			:  IN STD_LOGIC_VECTOR(35 DOWNTO 0);
 			doutb 		: OUT STD_LOGIC_VECTOR(35 DOWNTO 0));
 	END COMPONENT;
+	
+	signal stat_read_addr : STD_LOGIC_VECTOR(8 DOWNTO 0);
+	signal stat_read_dout : STD_LOGIC_VECTOR(35 DOWNTO 0);
+	
+	COMPONENT mod_uart_regs is
+    generic (UART_RATE : integer;
+             REQ_SIZE  : integer);
 
-	signal dump_autokick_en, dump_autokick : std_logic;
-	signal stat_dump_kick, regs_dump_kick : std_logic;
+    port (Clk         : in  std_logic;
+          Rst         : in  std_logic;
+          RsRx        : in  std_logic;
+          RsTx        : out std_logic;
+          RegBusStart : out reg_bus_t;
+          RegBusEnd   : in  reg_bus_t);
+	end COMPONENT;
 
-	COMPONENT stat_reader
-	PORT(	Clk 			:  IN std_logic;
-			Rst 			:  IN std_logic;
-			Trgr	 		:  IN std_logic;
-			MemData 		:  IN std_logic_vector(35 downto 0);  
-			MemAddr 		: OUT std_logic_vector(8 downto 0);
-			ByteOut 		: OUT std_logic_vector(7 downto 0);
-         Request    	: OUT std_logic;
-         Grant      	:  IN std_logic;
-         ByteEna  	: OUT std_logic;
-         ReaderBusy	:  IN std_logic);
-	END COMPONENT;
-	signal stat_reader_trgr	: std_logic;
-	signal stat_read_dout	: std_logic_vector(35 downto 0);
-	signal stat_read_addr	: std_logic_vector(8 downto 0);	
-	signal stat_uart_byte	: std_logic_vector(7 downto 0);
-	signal stat_uart_kick	: std_logic;
+	type reg_chain is array (0 to 11) of reg_bus_t;
+	signal RegBus 			: reg_chain;
+
+	COMPONENT reg_ro is
+    generic (REG_BYTES     : integer;
+             REG_ADDR_BASE : reg_addr_t);
+
+    port (Clk     : in  std_logic;
+          Rst     : in  std_logic;
+          RegBusI : in  reg_bus_t;
+          RegBusO : out reg_bus_t;
+          Value   : in  std_logic_vector(REG_BYTES*8 - 1 downto 0));
+	end COMPONENT;
 	
-	COMPONENT reg_dumper is
-   GENERIC (N_BYTES : integer);
-   PORT( Clk        	: in  std_logic;
-         Rst        	: in  std_logic;
-         Trgr       	: in  std_logic;
-         Regs       	: in  std_logic_vector (N_BYTES * 8 - 1 downto 0);
-         Request    	: out std_logic;
-         Grant      	: in  std_logic;
-         Byte       	: out std_logic_vector (7 downto 0);
-         ByteEna    	: out std_logic;
-         ReaderBusy 	: in  std_logic);
-	END COMPONENT;
-	signal regs_to_dump		: std_logic_vector(223 downto 0);
-	signal reg_uart_byte		: std_logic_vector(7 downto 0);
-	signal reg_uart_kick		: std_logic;
+	COMPONENT reg is
+    generic (REG_BYTES     : integer;
+             DEFAULT_VALUE : integer := 0;
+             REG_ADDR_BASE : reg_addr_t);
+
+    port (Clk     : in  std_logic;
+          Rst     : in  std_logic;
+          RegBusI : in  reg_bus_t;
+          RegBusO : out reg_bus_t;
+          Value   : out std_logic_vector(REG_BYTES*8 - 1 downto 0));
+	end COMPONENT;
+	COMPONENT reg_byte is
+    generic (DEFAULT_VALUE : integer := 0;
+             REG_ADDR_BASE : reg_addr_t);
+
+    port (Clk     : in  std_logic;
+          Rst     : in  std_logic;
+          RegBusI : in  reg_bus_t;
+          RegBusO : out reg_bus_t;
+          Value   : out byte_t);
+	end COMPONENT;
 	
-	COMPONENT semaphore_cyclic IS
-   GENERIC (N_BITS : integer);
-   PORT( Clk     		: in  std_logic;
-         Rst     		: in  std_logic;
-         Request 		: in  std_logic_vector (N_BITS-1 downto 0);
-         Grant   		: out std_logic_vector (N_BITS-1 downto 0));
-	END COMPONENT;
-	signal req_uart : std_logic_vector(1 downto 0);
-	signal grt_uart : std_logic_vector(1 downto 0);
-	
-	signal uart_byte			: std_logic_vector(7 downto 0);
-	signal uart_kick, uart_busy : std_logic;
-	
-	COMPONENT uart_tx
-	PORT( Clk : IN std_logic;
-			Rst : IN std_logic;
-			FreqEn : IN std_logic;
-			Byte : IN std_logic_vector(7 downto 0);
-			Kick : IN std_logic;          
-			RsTx : OUT std_logic;
-			Busy : OUT std_logic);
-	END COMPONENT;	
-	
-	COMPONENT freq_generator
-	GENERIC (FREQUENCY : integer );
-	PORT( Clk : IN std_logic;
-			Rst : IN std_logic;          
-			Output : OUT std_logic);
-	END COMPONENT;
-	signal uart_freq_en : std_logic;
-	
-	signal LinkUp		: STD_LOGIC;
+	signal val_delay		: std_logic_vector(31 downto 0);
+	signal val_pkt_ival	: std_logic_vector(31 downto 0);
+	signal val_pkt_len	: std_logic_vector(15 downto 0);
+	signal val_pmem_addr	: std_logic_vector(15 downto 0);
+	signal val_pmem_dout	: std_logic_vector(7 downto 0);
+	signal val_csr			: std_logic_vector(7 downto 0);
+
+	COMPONENT reg_stat_reader is
+    generic (REG_ADDR_BASE : reg_addr_t);
+
+    port (Clk     : in  std_logic;
+          Rst     : in  std_logic;
+          RegBusI : in  reg_bus_t;
+          RegBusO : out reg_bus_t;
+          MemAddr : out std_logic_vector (8 downto 0);
+          MemData : in  std_logic_vector (35 downto 0));
+	end COMPONENT;
+
+	signal RstBtn		: STD_LOGIC;
+	signal RstStats	: STD_LOGIC;
+
+	signal LinkUp			: STD_LOGIC;
+	signal stat_read_addr2 : std_logic_vector(15 downto 0);
 	
 BEGIN
-	
+	stat_read_addr <= stat_read_addr2(stat_read_addr'range);
 	LinkUp	<=	not mdio_cfg_busy;
 	
-	btnC_db : debouncer port map (clk, btn(0), rst);
-	btnU_db : debouncer port map (clk, btn(1), mdio_trgr);
-	
-	btnD_db : debouncer PORT MAP (clk, btn(3), btnD);
-	btnR_db : debouncer PORT MAP (clk, btn(4), stat_reader_trgr);
+	btnC_db : debouncer port map (clk, btn(0), RstBtn);
+	rst		<= RstBtn or val_csr(0) when RISING_EDGE(clk);
+	RstStats	<= rst or val_csr(1) when RISING_EDGE(clk);
+	TX_en		<= LinkUp and val_csr(2) when RISING_EDGE(clk);
 		
 	counter64: counter 
 	GENERIC MAP( N_BITS => 64 )
@@ -508,55 +469,19 @@ BEGIN
 	PORT MAP(
 		Clk 		=> clk,
 		Rst		=> rst,
-		PktIn 	=> ctrl_de,
-		DataIn 	=> ctrl_dout,
+		PktIn 	=> rxCrcPkt,
+		DataIn 	=> rxCrcData,
 		Value		=> rxPktTs,
 		ValueEn	=> rxPktTsKick
 	);
-	
-	-- CONTROL path
-	
-	CONTROL_filter: ctrl_filter PORT MAP(
-		Clk 		=> clk,
-		Rst 		=> rst,
-		PktIn 	=> rxCrcPkt,
-		DataIn 	=> rxCrcData,
-		PktOut 	=> ctrl_de,
-		DataOut 	=> ctrl_dout,
-		CtrlEn 	=> ctrl_ce,
-		CtrlData => ctrl_cout
-	);
-		
-	CONTROL_regs: ctrl_regs PORT MAP(
-		Clk 		=> clk,
-		PktIn 	=> ctrl_ce,
-		DataIn 	=> ctrl_cout,
-		PktOut 	=> ctrl_pe,
-		DataOut 	=> ctrl_pout,
-		Regs 		=> regs
-	);
 
-	reg_delay	<= regs(79 downto 48);
-	reg_fival	<= regs(47 downto 16);
-	reg_flen		<= regs(15 downto 0);
-	
-	CONTROL_write_mem: ctrl_write_mem PORT MAP(
-		Clk 		=> clk,
-		PktIn 	=> ctrl_pe,
-		DataIn 	=> ctrl_pout,
-		MemAddr 	=> ctrl_mem_addr,
-		MemData 	=> ctrl_mem_data,
-		MemWe 	=> ctrl_mem_we
-	);
+	-- TX path	
 
 	pkt_mem : packet_mem port map (
 		clka		=> clk,
-		wea(0)	=> ctrl_mem_we,
-		addra		=> ctrl_mem_addr,
-		dina		=>	ctrl_mem_data,
-
-	-- TX path				
-
+		wea(0)	=> val_csr(7),
+		addra		=> val_pmem_addr(10 downto 0),
+		dina		=>	val_pmem_dout,
 		clkb		=> clk,
 		addrb		=> pkt_mem_addr,
 		doutb		=> pkt_mem_dout
@@ -566,14 +491,13 @@ BEGIN
 		Clk		=> clk,
 		Rst		=> rst,
 		Enable	=>	TX_en,
-		FrameLen => reg_flen(10 downto 0), -- b"001" & X"22",
-		FrameIval=> reg_fival(27 downto 0), -- ( 14 => '1', others => '0' ),
+		FrameLen => val_pkt_len(10 downto 0), -- b"001" & X"22",
+		FrameIval=> val_pkt_ival(27 downto 0), -- ( 14 => '1', others => '0' ),
 		MemAddr	=> pkt_mem_addr,
 		MemData	=> pkt_mem_dout,
 		BusPkt 	=> memPkt,
 		BusData 	=> memData
 	);
-	TX_en <= LinkUp and sw(7);
 	
 	TX_eth_add_ts: bus_append 
 	GENERIC MAP ( N_BYTES => 8 )
@@ -619,7 +543,7 @@ BEGIN
 
 	STAT_stat_calc: stat_calc PORT MAP(
 		Time64 		=> cnt64,
-		Delay 		=> reg_delay, -- X"0007A120", -- 5ms
+		Delay 		=> val_delay, -- X"0007A120", -- 5ms
 		Value 		=> rxPktTs,
 		KickIn 		=> rxPktTsKick,
 		Output 		=> stat_cprs_val,
@@ -637,7 +561,7 @@ BEGIN
 	
 	STAT_stat_writer: stat_writer PORT MAP(
 		Clk 			=> clk,
-		Rst 			=> rst,
+		Rst 			=> RstStats,
 		MemWe 		=> stat_wr_we,
 		MemAddr	 	=> stat_wr_addr,
 		MemDin 		=> stat_wr_din,
@@ -659,74 +583,68 @@ BEGIN
 		doutb 		=> stat_read_dout
 	);
 
-	E2K_dump_autokick : enable_to_kick PORT MAP(clk, cnt64(31), dump_autokick_en);
-	dump_autokick <= dump_autokick_en and sw(6);
-	
-	stat_dump_kick <= stat_reader_trgr or dump_autokick when rising_edge(clk);
-	DUMP_stat_reader: stat_reader PORT MAP(
-		Clk 			=> clk,
-		Rst 			=> rst,
-		Trgr 			=> stat_dump_kick,
-		MemData 		=> stat_read_dout,
-		MemAddr 		=> stat_read_addr,
-		Request		=> req_uart(0),
-		Grant			=> grt_uart(0),
-		ByteOut 		=> stat_uart_byte,
-		ByteEna 		=> stat_uart_kick,
-		ReaderBusy 	=> uart_busy
-	);
-	
-	
 	CNT_udrfl	: counter_en GENERIC MAP (N_BITS => 36) 
-										 PORT MAP(clk, rst, cnt_underflow_en, cnt_underflow);
-	E2K_rx_pkt : enable_to_kick PORT MAP(clk, ctrl_de, cnt_rx_pkt_en);
+										 PORT MAP(clk, RstStats, cnt_underflow_en, cnt_underflow);
 	CNT_rxpkt : counter_en GENERIC MAP (N_BITS => 36) 
-									 PORT MAP(clk, rst, cnt_rx_pkt_en, cnt_rx_pkt);
-	E2K_rx_ctrl : enable_to_kick PORT MAP(clk, ctrl_ce, cnt_rx_ctrl_en);
-	CNT_rxctrl	: counter_en GENERIC MAP (N_BITS => 36) 
-									 PORT MAP(clk, rst, cnt_rx_ctrl_en, cnt_rx_ctrl);
+									 PORT MAP(clk, RstStats, rxPktTsKick, cnt_rx_pkt);
 	E2K_tx_pkt : enable_to_kick PORT MAP(clk, memPkt, cnt_tx_pkt_en);
 	CNT_txpkt : counter_en GENERIC MAP (N_BITS => 36) 
-									 PORT MAP(clk, rst, cnt_tx_pkt_en, cnt_tx_pkt);
-	
-	regs_to_dump <= cnt_underflow & cnt_rx_pkt & cnt_rx_ctrl & cnt_tx_pkt & regs;
-	regs_dump_kick <= btnD or dump_autokick;
-	
-	DUMP_REGS : reg_dumper GENERIC MAP (N_BYTES => 28)
-	PORT MAP(
-		Clk			=> clk,
-		Rst			=> rst,
-		Trgr			=> regs_dump_kick,
-		Regs			=> regs_to_dump,
-		Request		=> req_uart(1),
-		Grant			=> grt_uart(1),
-		Byte			=> reg_uart_byte,
-		ByteEna		=> reg_uart_kick,
-		ReaderBusy	=> uart_busy
-	);
-	
-	SEM_uart : semaphore_cyclic GENERIC MAP (N_BITS => 2)
-	PORT MAP( clk, rst, req_uart, grt_uart );
-	
-	uart_kick <= stat_uart_kick OR reg_uart_kick;
-	uart_byte <= stat_uart_byte OR reg_uart_byte;
-		
-	STAT_uart_tx: uart_tx PORT MAP(
-		Clk 			=> clk,
-		Rst 			=> rst,
-		FreqEn 		=> uart_freq_en,
-		Byte 			=> uart_byte,
-		Kick 			=> uart_kick,
-		RsTx 			=> RsTx,
-		Busy 			=> uart_busy
-	);
-	
-	STAT_uart_freq : freq_generator
-	GENERIC MAP (FREQUENCY => 9600 )
-	PORT MAP( Clk => clk,
+									 PORT MAP(clk, RstStats, cnt_tx_pkt_en, cnt_tx_pkt);
+
+	reg_master : mod_uart_regs
+	GENERIC MAP (UART_RATE => 115200,
+					 REQ_SIZE  => 4)
+	PORT MAP (Clk => clk,
 				 Rst => rst,
-				 Output => uart_freq_en
-   );
-		
+				 RsRx => RsRx,
+				 RsTx => RsTx,
+				 RegBusStart => RegBus(0),
+				 RegBusEnd => RegBus(11)
+	);
+	
+	REG_csr : reg_byte
+	GENERIC MAP (REG_ADDR_BASE => b"000000")
+	PORT MAP (clk, rst, RegBus(0), RegBus(1), val_csr);
+	
+	REG_pmem_data : reg_byte
+	GENERIC MAP (REG_ADDR_BASE => b"000001")
+	PORT MAP (clk, rst, RegBus(1), RegBus(2), val_pmem_dout);
+	
+	REG_pmem_addr : reg
+	GENERIC MAP (REG_BYTES => 2, REG_ADDR_BASE => b"000010")
+	PORT MAP (clk, rst, RegBus(2), RegBus(3), val_pmem_addr);	
+	
+	REG_pkt_len : reg
+	GENERIC MAP (REG_BYTES => 2, REG_ADDR_BASE => b"000100")
+	PORT MAP (clk, rst, RegBus(3), RegBus(4), val_pkt_len);
+	
+	REG_pkt_ival : reg
+	GENERIC MAP (REG_BYTES => 4, REG_ADDR_BASE => b"001000")
+	PORT MAP (clk, rst, RegBus(4), RegBus(5), val_pkt_ival);
+
+	REG_delay : reg
+	GENERIC MAP (REG_BYTES => 4, REG_ADDR_BASE => b"001100")
+	PORT MAP (clk, rst, RegBus(5), RegBus(6), val_delay);
+	
+	REG_uflow : reg_ro
+	GENERIC MAP (REG_BYTES => 8, REG_ADDR_BASE => b"010000")
+	PORT MAP (clk, rst, RegBus(6), RegBus(7), X"0000000" & cnt_underflow);	
+	
+	REG_tx_cnt : reg_ro
+	GENERIC MAP (REG_BYTES => 8, REG_ADDR_BASE => b"011000")
+	PORT MAP (clk, rst, RegBus(7), RegBus(8), X"0000000" & cnt_tx_pkt);	
+	
+	REG_rx_cnt : reg_ro
+	GENERIC MAP (REG_BYTES => 8, REG_ADDR_BASE => b"100000")
+	PORT MAP (clk, rst, RegBus(8), RegBus(9), X"0000000" & cnt_rx_pkt);
+	
+	REG_saddr : reg
+	GENERIC MAP (REG_BYTES => 2, REG_ADDR_BASE => b"101000")
+	PORT MAP (clk, rst, RegBus(9), RegBus(10), stat_read_addr2);
+	
+	REG_sdout : reg_ro
+	GENERIC MAP (REG_BYTES => 8, REG_ADDR_BASE => b"110000")
+	PORT MAP (clk, rst, RegBus(10), RegBus(11), X"0000000" & stat_read_dout);
+	
 end Behavioral;
 
